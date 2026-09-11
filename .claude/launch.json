@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sua-vitrine",
+      "runtimeExecutable": "C:\\Users\\Brayam\\AppData\\Roaming\\dyad\\managed-tools\\node\\v24.18.0\\node.exe",
+      "runtimeArgs": ["serve.cjs"],
+      "port": 8085
+    }
+  ]
+}
