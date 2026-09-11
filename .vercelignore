@@ -1,0 +1,4 @@
+SUPABASE_CREDENTIALS.local
+*.local
+supabase
+serve.cjs
