@@ -1,3 +1,4 @@
 .vercel
 *.local
 node_modules
+supabase/.temp

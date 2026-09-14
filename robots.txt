@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://suavitrine.net.br/sitemap.xml
+Sitemap: https://suavitrine.net.br/sitemap-liberado.xml

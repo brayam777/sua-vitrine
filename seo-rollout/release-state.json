@@ -1,0 +1,13 @@
+{
+  "lastReleasedIndex": 5000,
+  "batchSize": 5000,
+  "history": [
+    {
+      "data": "2026-09-14",
+      "de": 0,
+      "ate": 5000,
+      "liberadasNoLote": 5000,
+      "totalLiberadoAcumulado": 5000
+    }
+  ]
+}

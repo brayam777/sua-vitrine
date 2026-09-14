@@ -30,8 +30,8 @@ function wireMobileMenu() {
 const FALLBACK_PROJECTS = [
   {
     name: 'Romano Joias',
-    domain: 'romano-joias.vercel.app',
-    url: 'https://romano-joias.vercel.app',
+    domain: 'romano.suavitrine.net.br',
+    url: 'https://romano.suavitrine.net.br',
     segment: 'Ourivesaria',
     headline: 'Joias em ouro, feitas à mão pra você',
     description: 'Peças exclusivas, desenhadas e lapidadas uma a uma — sem produção em série.',
@@ -43,8 +43,8 @@ const FALLBACK_PROJECTS = [
   },
   {
     name: 'Luanne Pratas 925',
-    domain: 'luanne-pratas.vercel.app',
-    url: 'https://luanne-pratas.vercel.app',
+    domain: 'luanne-pratas.suavitrine.net.br',
+    url: 'https://luanne-pratas.suavitrine.net.br',
     segment: 'Joias em prata',
     headline: 'Faça o seu pedido! Prata 925 legítima',
     description: 'Catálogo por categoria, peças exclusivas selecionadas com carinho.',
@@ -56,8 +56,8 @@ const FALLBACK_PROJECTS = [
   },
   {
     name: 'Wellness Fit Store',
-    domain: 'wellness-fit-store.vercel.app',
-    url: 'https://wellness-fit-store.vercel.app',
+    domain: 'wellness-fit-store.suavitrine.net.br',
+    url: 'https://wellness-fit-store.suavitrine.net.br',
     segment: 'Moda fitness',
     headline: 'Treine com estilo e conforto',
     description: 'Leggings, tops e conjuntos — moda fitness feminina, do treino ao dia a dia.',
