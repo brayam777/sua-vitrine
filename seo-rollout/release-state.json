@@ -1,6 +1,6 @@
 {
-  "lastReleasedIndex": 15000,
-  "batchSize": 5000,
+  "lastReleasedIndex": 27805,
+  "batchSize": 100000,
   "history": [
     {
       "data": "2026-09-14",
@@ -22,6 +22,13 @@
       "ate": 15000,
       "liberadasNoLote": 5000,
       "totalLiberadoAcumulado": 15000
+    },
+    {
+      "data": "2026-09-17",
+      "de": 15000,
+      "ate": 27805,
+      "liberadasNoLote": 12805,
+      "totalLiberadoAcumulado": 27805
     }
   ]
 }
