@@ -120,7 +120,7 @@ img { max-width: 100%; display: block; }
 .mobile-nav.open { display: flex; }
 
 @media (max-width: 860px) {
-  .main-nav, .nav-cta { display: none; }
+  .main-nav, .header-inner .nav-cta { display: none; }
   .menu-toggle { display: flex; }
 }
 
@@ -613,3 +613,87 @@ section:not(.hero) { padding: 88px 0; }
   .dif-grid { grid-template-columns: 1fr; }
   .region-grid { grid-template-columns: 1fr; }
 }
+
+/* ---------- Home redesign: hero com prova embutida, timeline, CTA em bloco de cor ---------- */
+
+.hero-split {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  max-width: none;
+}
+
+.hero-copy { max-width: 560px; }
+
+.hero-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hero-demo-label {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--accent-2);
+}
+
+.hero-demo .demo-wrap { gap: 14px; }
+.hero-demo .demo-card { max-width: 440px; }
+
+@media (max-width: 900px) {
+  .hero-split { grid-template-columns: 1fr; gap: 40px; }
+  .hero-copy { max-width: none; }
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  position: relative;
+  margin-top: 12px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 17px;
+  left: calc(12.5% - 1px);
+  right: calc(12.5% - 1px);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.timeline-item { position: relative; text-align: center; }
+
+.timeline-num {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.timeline-item h3 { margin: 0 0 8px; font-size: 16px; }
+.timeline-item p { margin: 0; color: rgba(255, 255, 255, 0.65); font-size: 14px; }
+
+@media (max-width: 900px) {
+  .timeline { grid-template-columns: 1fr; gap: 28px; }
+  .timeline::before { top: 0; bottom: 0; left: 17px; right: auto; width: 2px; height: auto; }
+  .timeline-item { text-align: left; padding-left: 50px; }
+  .timeline-num { position: absolute; left: 0; top: 0; margin-bottom: 0; }
+}
+
+.contact.contact--accent { background: var(--accent); }
+.contact--accent .btn-whatsapp { background: var(--ink); }
+.contact--accent .contact-sub { color: rgba(255, 255, 255, 0.85); }
