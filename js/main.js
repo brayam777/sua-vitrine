@@ -106,6 +106,7 @@ function buildPortfolioGrid(projects) {
 function wireDemoCarousel(projects) {
   const card = document.getElementById('demoCard');
   const frameWrap = document.getElementById('miniFrame');
+  const mediaWrap = document.getElementById('demoMedia');
   const labelsWrap = document.getElementById('demoLabels');
   const domain = document.getElementById('demoDomain');
   const eyebrow = document.getElementById('demoEyebrow');
@@ -121,11 +122,34 @@ function wireDemoCarousel(projects) {
     )
     .join('');
   labelsWrap.innerHTML = projects
-    .map((p, i) => `<span class="demo-label-dot${i === 0 ? ' active' : ''}" data-i="${i}"></span>`)
+    .map(
+      (p, i) =>
+        `<button type="button" class="demo-label-dot${i === 0 ? ' active' : ''}" data-i="${i}" aria-label="Ver ${p.name}"></button>`
+    )
     .join('');
 
   const frames = frameWrap.querySelectorAll('.demo-frame-item');
   const dots = labelsWrap.querySelectorAll('.demo-label-dot');
+
+  // Setas de navegação, criadas por JS (assim toda página que usa esse carrossel ganha o recurso).
+  let prevBtn = null;
+  let nextBtn = null;
+  if (mediaWrap && projects.length > 1) {
+    prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.className = 'demo-arrow demo-arrow-prev';
+    prevBtn.setAttribute('aria-label', 'Site anterior');
+    prevBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>';
+
+    nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'demo-arrow demo-arrow-next';
+    nextBtn.setAttribute('aria-label', 'Próximo site');
+    nextBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
+
+    mediaWrap.appendChild(prevBtn);
+    mediaWrap.appendChild(nextBtn);
+  }
 
   function fitFrames() {
     const scale = frameWrap.clientWidth / 1440;
@@ -135,8 +159,11 @@ function wireDemoCarousel(projects) {
   window.addEventListener('resize', fitFrames);
 
   let i = 0;
+  let timer = null;
 
-  function apply(project, index) {
+  function apply(index) {
+    i = ((index % projects.length) + projects.length) % projects.length;
+    const project = projects[i];
     card.style.setProperty('--demo-bg', project.bg_color);
     card.style.setProperty('--demo-a', project.accent_color);
     card.style.setProperty('--demo-b', project.text_color);
@@ -145,18 +172,63 @@ function wireDemoCarousel(projects) {
     title.textContent = project.headline;
     desc.textContent = project.description;
     btn.href = project.url;
-    frames.forEach((f) => f.classList.toggle('is-active', Number(f.dataset.i) === index));
-    dots.forEach((d) => d.classList.toggle('active', Number(d.dataset.i) === index));
+    frames.forEach((f) => f.classList.toggle('is-active', Number(f.dataset.i) === i));
+    dots.forEach((d) => d.classList.toggle('active', Number(d.dataset.i) === i));
   }
 
-  apply(projects[0], 0);
+  function restartAutoplay() {
+    if (timer) clearInterval(timer);
+    if (projects.length > 1) {
+      timer = setInterval(() => apply(i + 1), 6000);
+    }
+  }
+
+  function goTo(index) {
+    apply(index);
+    restartAutoplay();
+  }
+
+  apply(0);
+  restartAutoplay();
 
   if (projects.length > 1) {
-    setInterval(() => {
-      i = (i + 1) % projects.length;
-      apply(projects[i], i);
-    }, 6000);
+    dots.forEach((d) => d.addEventListener('click', () => goTo(Number(d.dataset.i))));
+    prevBtn.addEventListener('click', () => goTo(i - 1));
+    nextBtn.addEventListener('click', () => goTo(i + 1));
   }
+
+  if (!mediaWrap) return;
+
+  // Clicar na prévia abre o site real (o iframe em si não reage a clique, é só visual).
+  // Arrastar (mouse ou toque) troca de site; um arraste não deve abrir o link junto.
+  let dragging = false;
+  let didDrag = false;
+  let startX = 0;
+
+  mediaWrap.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    didDrag = false;
+    startX = e.clientX;
+  });
+  mediaWrap.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    if (Math.abs(e.clientX - startX) > 8) didDrag = true;
+  });
+  mediaWrap.addEventListener('pointerup', (e) => {
+    if (!dragging) return;
+    dragging = false;
+    const delta = e.clientX - startX;
+    if (Math.abs(delta) > 40 && projects.length > 1) {
+      goTo(delta < 0 ? i + 1 : i - 1);
+    }
+  });
+  mediaWrap.addEventListener('pointerleave', () => {
+    dragging = false;
+  });
+  mediaWrap.addEventListener('click', (e) => {
+    if (e.target.closest('.demo-arrow') || didDrag) return;
+    window.open(projects[i].url, '_blank', 'noopener');
+  });
 }
 
 function setYear() {

@@ -282,7 +282,34 @@ section:not(.hero) { padding: 88px 0; }
   aspect-ratio: 16 / 10;
   background: #111;
   overflow: hidden;
+  cursor: pointer;
+  touch-action: pan-y;
+  user-select: none;
 }
+
+.demo-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(15, 13, 22, 0.6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.demo-arrow:hover { background: rgba(15, 13, 22, 0.85); opacity: 1; }
+.demo-arrow svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.6; }
+.demo-arrow-prev { left: 10px; }
+.demo-arrow-next { right: 10px; }
 
 .demo-real-badge {
   position: absolute;
@@ -392,15 +419,27 @@ section:not(.hero) { padding: 88px 0; }
 
 .demo-btn:hover { transform: translateY(-1px); }
 
-.demo-labels { display: flex; gap: 8px; }
+.demo-labels { display: flex; gap: 2px; }
 
 .demo-label-dot {
+  width: 28px; height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-label-dot::before {
+  content: '';
+  display: block;
   width: 8px; height: 8px; border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
-.demo-label-dot.active {
+.demo-label-dot.active::before {
   background: var(--accent-2);
   transform: scale(1.3);
 }
