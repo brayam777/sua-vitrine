@@ -1,3 +1,4 @@
+import './pixel.js';
 import { supabase, isConfigured } from './supabase-config.js';
 
 const WHATSAPP_NUMBER = '5562986057981';
