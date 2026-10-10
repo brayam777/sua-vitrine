@@ -21,8 +21,17 @@
     s.parentNode.insertBefore(t, s);
   }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
+  // Nicho do anúncio (?nicho=pratas). Guardado na sessão pra continuar valendo se o visitante navegar no site.
+  var nicho = '';
+  try {
+    nicho = new URLSearchParams(location.search).get('nicho') || sessionStorage.getItem('sv_nicho') || '';
+    if (nicho) sessionStorage.setItem('sv_nicho', nicho);
+  } catch (e) {}
+  var extra = nicho ? { nicho: nicho } : {};
+  function comNicho(obj) { for (var k in extra) obj[k] = extra[k]; return obj; }
+
   fbq('init', PIXEL_ID);
-  fbq('track', 'PageView');
+  fbq('track', 'PageView', comNicho({}));
 
   // Os links de WhatsApp recebem o href via JS depois do carregamento,
   // então a checagem é feita na hora do clique.
@@ -30,12 +39,12 @@
     var a = e.target.closest && e.target.closest('a');
     if (!a || !/wa\.me|api\.whatsapp\.com/.test(a.href)) return;
     var secao = a.closest('section, header, footer');
-    fbq('track', 'Contact', {
+    fbq('track', 'Contact', comNicho({
       content_name: 'WhatsApp',
       content_category: secao && secao.id ? secao.id : (a.classList.contains('float') ? 'botao-flutuante' : 'pagina'),
       value: 497,
       currency: 'BRL'
-    });
+    }));
   }, true);
 
   // ViewContent = visita interessada: dispara uma vez só, no que vier primeiro —
@@ -44,7 +53,7 @@
   function visitaInteressada(motivo) {
     if (interessado) return;
     interessado = true;
-    fbq('track', 'ViewContent', { content_name: motivo, value: 497, currency: 'BRL' });
+    fbq('track', 'ViewContent', comNicho({ content_name: motivo, value: 497, currency: 'BRL' }));
   }
 
   function observarSecoes() {

@@ -422,8 +422,13 @@
 <script>
   const WHATSAPP = "5562986057981";
 
+  // Visitas de anúncio de nicho chegam com ?nicho=pratas: a mensagem já vem com o ramo preenchido.
+  const NICHOS = { pratas: "prata/joias" };
+  const nicho = NICHOS[new URLSearchParams(location.search).get("nicho")];
+
   document.querySelectorAll("[data-zap]").forEach(a => {
-    a.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(a.dataset.zap);
+    const msg = nicho ? a.dataset.zap.replace("________", nicho) : a.dataset.zap;
+    a.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
     a.target = "_blank"; a.rel = "noopener";
   });
 
