@@ -3,7 +3,8 @@
 //
 // Eventos:
 //   PageView    → toda página
-//   ViewContent → visitante chegou na seção de preço (#preco)
+//   ViewContent → visita interessada: chegou no portfólio/preço ou ficou 30s no site
+//                 (é o evento que o conjunto "Viu o preço" otimiza)
 //   Contact     → clique em qualquer link de WhatsApp (é a conversão principal dos anúncios)
 (function () {
   var PIXEL_ID = '1112554241637257';
@@ -37,17 +38,42 @@
     });
   }, true);
 
-  function observarPreco() {
-    var preco = document.querySelector('#preco .price') || document.getElementById('preco');
-    if (!preco || !('IntersectionObserver' in window)) return;
-    var io = new IntersectionObserver(function (es) {
-      if (es.some(function (x) { return x.isIntersecting; })) {
-        fbq('track', 'ViewContent', { content_name: 'Preço R$ 497', value: 497, currency: 'BRL' });
-        io.disconnect();
-      }
-    }, { threshold: 0.3 });
-    io.observe(preco);
+  // ViewContent = visita interessada: dispara uma vez só, no que vier primeiro —
+  // o visitante chegou no portfólio (ou no preço) ou ficou 30s com a página aberta na tela.
+  var interessado = false;
+  function visitaInteressada(motivo) {
+    if (interessado) return;
+    interessado = true;
+    fbq('track', 'ViewContent', { content_name: motivo, value: 497, currency: 'BRL' });
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', observarPreco);
-  else observarPreco();
+
+  function observarSecoes() {
+    var alvos = [
+      [document.getElementById('portfolio'), 'Viu o portfólio'],
+      [document.querySelector('#preco .price') || document.getElementById('preco'), 'Viu o preço']
+    ].filter(function (x) { return x[0]; });
+    if (!alvos.length || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (x) {
+        if (!x.isIntersecting) return;
+        var achou = alvos.find(function (a) { return a[0] === x.target; });
+        visitaInteressada(achou ? achou[1] : 'Rolou a página');
+        io.disconnect();
+      });
+    }, { threshold: 0.15 });
+    alvos.forEach(function (a) { io.observe(a[0]); });
+  }
+
+  // Conta só o tempo com a aba visível, pra não premiar aba esquecida aberta.
+  var segundos = 0;
+  var relogio = setInterval(function () {
+    if (interessado) return clearInterval(relogio);
+    if (document.visibilityState === 'visible' && ++segundos >= 30) {
+      visitaInteressada('Ficou 30s no site');
+      clearInterval(relogio);
+    }
+  }, 1000);
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', observarSecoes);
+  else observarSecoes();
 })();
