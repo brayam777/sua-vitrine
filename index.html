@@ -426,10 +426,27 @@
   const NICHOS = { pratas: "prata/joias" };
   const nicho = NICHOS[new URLSearchParams(location.search).get("nicho")];
 
+  // Navegador interno do Instagram/Facebook: link em nova aba muitas vezes não abre o WhatsApp.
+  // Lá dentro, tenta abrir o app direto e, se a página continuar na tela, cai no wa.me na mesma aba.
+  const inApp = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Barcelona/i.test(navigator.userAgent);
+  function abrirZap(msg, webHref) {
+    let saiu = false;
+    const marcar = () => { saiu = true; };
+    document.addEventListener("visibilitychange", marcar, { once: true });
+    window.addEventListener("pagehide", marcar, { once: true });
+    location.href = "whatsapp://send?phone=" + WHATSAPP + "&text=" + encodeURIComponent(msg);
+    setTimeout(() => { if (!saiu && document.visibilityState === "visible") location.href = webHref; }, 1500);
+  }
+
   document.querySelectorAll("[data-zap]").forEach(a => {
     const msg = nicho ? a.dataset.zap.replace("________", nicho) : a.dataset.zap;
     a.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg);
-    a.target = "_blank"; a.rel = "noopener";
+    if (inApp) {
+      a.removeAttribute("target");
+      a.addEventListener("click", e => { e.preventDefault(); abrirZap(msg, a.href); });
+    } else {
+      a.target = "_blank"; a.rel = "noopener";
+    }
   });
 
   document.getElementById("ano").textContent = new Date().getFullYear();

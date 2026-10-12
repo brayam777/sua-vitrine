@@ -7,9 +7,29 @@ function waLink(message) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+// Navegador interno do Instagram/Facebook: link em nova aba muitas vezes não abre o WhatsApp.
+// Lá dentro, tenta abrir o app direto e, se a página continuar na tela, cai no wa.me na mesma aba.
+const IN_APP = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Barcelona/i.test(navigator.userAgent);
+
+function openWhatsappInApp(message, webHref) {
+  let left = false;
+  const mark = () => { left = true; };
+  document.addEventListener('visibilitychange', mark, { once: true });
+  window.addEventListener('pagehide', mark, { once: true });
+  location.href = `whatsapp://send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(message)}`;
+  setTimeout(() => { if (!left && document.visibilityState === 'visible') location.href = webHref; }, 1500);
+}
+
 function wireGenericWhatsappLinks() {
-  const generic = waLink('Olá! Vi o site da Sua Vitrine e quero criar minha vitrine online.');
-  document.querySelectorAll('[data-wa-generic]').forEach((el) => (el.href = generic));
+  const message = 'Olá! Vi o site da Sua Vitrine e quero criar minha vitrine online.';
+  const generic = waLink(message);
+  document.querySelectorAll('[data-wa-generic]').forEach((el) => {
+    el.href = generic;
+    if (IN_APP) {
+      el.removeAttribute('target');
+      el.addEventListener('click', (e) => { e.preventDefault(); openWhatsappInApp(message, generic); });
+    }
+  });
 }
 
 function wireMobileMenu() {
