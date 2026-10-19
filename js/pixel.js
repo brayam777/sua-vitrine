@@ -11,6 +11,9 @@
   if (window.__suaVitrinePixel) return;
   window.__suaVitrinePixel = true;
 
+  // Só o site de verdade manda dados pra Meta: testes no localhost e prévias da Vercel ficam de fora.
+  if (!/^(www\.)?suavitrine\.net\.br$/.test(location.hostname)) return;
+
   !function (f, b, e, v, n, t, s) {
     if (f.fbq) return; n = f.fbq = function () {
       n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
