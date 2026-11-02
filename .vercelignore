@@ -2,3 +2,8 @@ SUPABASE_CREDENTIALS.local
 *.local
 supabase
 serve.cjs
+seo-rollout
+tests
+.claude
+CLAUDE.md
+README.md

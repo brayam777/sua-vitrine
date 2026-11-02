@@ -1,4 +1,35 @@
-.vercel
+# Segredos e credenciais: nunca versionar
+.env
+.env.*
+!.env.example
 *.local
-node_modules
+*CREDENTIALS*
+*SECRET*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.token
+secrets.*
+
+# Banco: dumps e cache da CLI do Supabase
+*.dump
+*.backup
+*.sql.bak
+dump*.sql
 supabase/.temp
+supabase/.branches
+
+# Vercel / dependências
+.vercel
+node_modules
+
+# Configuração local do Claude Code (o launch.json é versionado de propósito)
+.claude/settings.local.json
+
+# Sistema e editor
+.DS_Store
+Thumbs.db
+*.log
