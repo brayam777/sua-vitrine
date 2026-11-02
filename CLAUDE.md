@@ -57,7 +57,7 @@ Confere nas ~27,8 mil páginas: pixel carregado, links/assets existentes, canoni
   1. Painel do Supabase → SQL Editor → colar o `.sql` e rodar (mais simples).
   2. CLI: `npx supabase@latest login`, `npx supabase@latest link --project-ref svovabwkremtnnesuknj`, `npx supabase@latest db push` (a conta logada precisa de acesso ao projeto).
 - Depois de criar tabela/coluna, rode `NOTIFY pgrst, 'reload schema';` para o PostgREST enxergar. RLS sozinha não basta: a tabela também precisa de `GRANT` para `anon`.
-- Chaves secretas (`service_role`, token de acesso, senha do Postgres) **nunca** entram no repositório. Ficam em `SUPABASE_CREDENTIALS.local` (ignorado pelo git e pela Vercel) ou no gerenciador de senhas.
+- Chaves secretas (a chave de serviço do Supabase, token de acesso, senha do Postgres) **nunca** entram no repositório. Ficam em `SUPABASE_CREDENTIALS.local` (ignorado pelo git e pela Vercel) ou no gerenciador de senhas.
 
 ## Deploy
 
